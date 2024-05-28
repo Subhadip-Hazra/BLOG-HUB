@@ -1,0 +1,56 @@
+{
+    "name": "Blog Hub",
+    "short_name": "Blog Hub",
+    "description": "Your ultimate source for insightful articles.",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#007bff",
+    "icons": [
+        {
+            "src": "/logo.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "/logo.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ],
+    "orientation": "portrait",
+    "scope": "/",
+    "lang": "en",
+    "categories": [
+        "news",
+        "education",
+        "blog",
+        "recipes",
+        "tech",
+        "ai"
+    ],
+    "screenshots": [
+        {
+            "src": "/screenshot1.png",
+            "type": "image/png",
+            "sizes": "720x1280"
+        },
+        {
+            "src": "/screenshot2.png",
+            "type": "image/png",
+            "sizes": "1280x720"
+        },
+        {
+            "src": "/screenshot3.png",
+            "type": "image/png",
+            "sizes": "1280x720"
+        }
+    ],
+    "related_applications": [
+        {
+            "platform": "web",
+            "url": "https://blog-hub-69.netlify.app/",
+            "id": "bloghub"
+        }
+    ]
+}

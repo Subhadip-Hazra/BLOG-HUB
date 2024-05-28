@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Allow: /sitemaps.txt
+Allow: /robots.txt
+Allow: /terms-and-condition
+Allow: /login
+Allow: /sign-up
+
+Sitemap: https://blog-hub-69.netlify.app/sitemap.txt
