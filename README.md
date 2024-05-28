@@ -56,7 +56,7 @@ Make sure you have Node.js and npm installed.
 ### Installation
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-username/blog-hub.git
+   https://github.com/Subhadip-Hazra/BLOG-HUB.git
    ```
 2. Navigate to the project directory:
    ```bash
