@@ -1,0 +1,17 @@
+/* Custom scrollbar styles */
+.flex-1::-webkit-scrollbar {
+    height: 1px;
+}
+
+.flex-1::-webkit-scrollbar-track {
+    background: #f1f1f1; 
+}
+
+.flex-1::-webkit-scrollbar-thumb {
+    background: #888; 
+    border-radius: 3px;
+}
+
+.flex-1::-webkit-scrollbar-thumb:hover {
+    background: #555; 
+}
