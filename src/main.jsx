@@ -3,7 +3,7 @@ import './index.css'
 import {
   RouterProvider,
 } from "react-router-dom";
-import Router from './Router/Router.jsx';
+import Router from './Router/router.jsx';
 import AuthProvider from './context/AuthProvider.jsx';
 
 

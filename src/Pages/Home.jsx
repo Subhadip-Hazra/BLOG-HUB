@@ -1,133 +1,106 @@
-import React, { useEffect, useState } from "react";
-import Banner from "../Components/Banner";
-import Sidebar from "../Slidebar/Sidebar";
-import Card from "../Components/Card";
-import Newsletter from "../Components/NewsLetter";
-import Blogs from "./Blogs";
-import Loading from "../Components/Loading"
+import React, { useContext, useState } from 'react';
+import { FiSearch } from 'react-icons/fi';
+import UserCard from '../Components/UserCard';
+import AssistantCard from '../Components/AssistantCard';
+import Loader from '../Components/Loader'; // Ensure correct import path
+import { AuthContext } from '../context/AuthProvider';
+import { Link } from 'react-router-dom';
+import Grittings from '../Components/grittings';
 
 const Home = () => {
-    const [selectedCategory, setSelectedCategory] = useState(null);
-    const [blogs, setBlogs] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
+    const { user } = useContext(AuthContext);
+    const [queries, setQueries] = useState([]); // State to store user queries
+    const [output, setOutput] = useState([]); // State to store chatbot responses
+    const [currentQuery, setCurrentQuery] = useState(''); // State to store current user query
+    const [loading, setLoading] = useState(false); // State to manage loading
+    const [check, setCheck] = useState(true);
 
-    useEffect(() => {
-        setIsLoading(true);
-        fetch("https://blog-app-backend-toa9.onrender.com/all-blogs")
-            .then((res) => res.json())
-            .then((data) => {
-                setBlogs(data);
-                setIsLoading(false);
+    // Function to handle form submission
+    const handleSubmit = () => {
+        if (currentQuery.trim() === '') return; // Don't add empty queries
+        setCheck(false);
+        setQueries(prevQueries => [...prevQueries, currentQuery]); // Add current query to the list of queries
+        sendToBackend(currentQuery); // Call sendToBackend function with the current query
+        setCurrentQuery(''); // Clear the input field
+    }
+
+    async function sendToBackend(query) {
+        setLoading(true);
+        try {
+            const response = await fetch('https://chatbot-backend-onan.onrender.com/chatbot', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ user_message: query }),
             });
-    }, []);
-
-    // ----------- Input Filter -----------
-    const [query, setQuery] = useState("");
-    
-    const handleInputChange = (event) => {
-        setQuery(event.target.value);
-    };
-    
-    
-    //.............Input Blogger Filter.............
-    const [bloggerQuery,setBloggerQuery] = useState("");
-
-    const handleUserChange = (event) => {
-        setBloggerQuery(event.target.value);
-        //console.log("nice"+event.target.value)
-    };
-
-    const filteredItems = blogs.filter(
-        (blog) => blog.blogTitle && blog.blogTitle.toLowerCase().indexOf(query.toLowerCase()) !== -1
-    );
-
-    const filteredBlogger = blogs.filter(
-        (blog) => blog.yourName && blog.yourName.toLowerCase().indexOf(bloggerQuery.toLowerCase()) !== -1
-    );
-
-    // ----------- Radio Filtering -----------
-    const handleChange = (event) => {
-        setSelectedCategory(event.target.value);
-    };
-
-
-
-    // ------------ Button Filtering -----------
-    const handleClick = (event) => {
-        //console.log('handle click event ' + event.target.value);
-        setSelectedCategory(event.target.value);
-
-    };
-
-    const filteredData = (blogs, selected, query ,bloggerQuery) => {
-        let filteredBlogs = blogs;
-
-        // Filtering Input Items
-        if (query) {
-            filteredBlogs = filteredItems;
-        }
-
-        if(bloggerQuery){
-            filteredBlogs = filteredBlogger;
-            //console.log(filteredBlogger)
-        }
-
-        // Applying selected filter
-        if (selected) {
-            if (selected === 'Technology' || selected === 'Fashion' || selected === 'Photography' || selected === 'Travel' || selected === 'Programming') {
-                // Filter by selected category
-                filteredBlogs = filteredBlogs.filter(blog =>
-                    blog.tags && blog.tags.some(tag => tag.label === selected)
-                );
-            } else if (selected === 'Last 24 hours' || selected === 'Last 7 days' || selected === 'Last 30 days') {
-                //console.log("just check the date " + selected);
-                // Filter by posting date range
-                const currentDate = new Date();
-                const selectedDate = new Date();
-                if (selected === 'Last 24 hours') {
-                    selectedDate.setDate(selectedDate.getDate() - 1);
-                } else if (selected === 'Last 7 days') {
-                    selectedDate.setDate(selectedDate.getDate() - 7);
-                } else if (selected === 'Last 30 days') {
-                    selectedDate.setDate(selectedDate.getDate() - 30);
-                }
-                filteredBlogs = filteredBlogs.filter(blog => new Date(blog.postingDate) >= selectedDate && new Date(blog.postingDate) <= currentDate);
-            } else {
-                // Filter by other criteria
-                alert("Server error 500");
+            if (!response.ok) {
+                console.error('Failed to send response');
             }
+            const data = await response.json();
+            setLoading(false);
+            setOutput(prevOutput => [...prevOutput, data.chatbot_response]); // Add the response to the output state
+    
+            // Save chat to history
+            saveChatToHistory(user?.uid, query, data.chatbot_response);
+        } catch (error) {
+            console.error('Unable to send data to backend', error);
         }
-
-        // Slice the data based on the current page
-        return filteredBlogs.map((data, i) => <Card key={i} data={data} imageSrc={data.imageSrc} />);
-    };
-
-    const result = filteredData(blogs, selectedCategory, query,bloggerQuery);
+    }
+    
+    async function saveChatToHistory(userId, query, response) {
+        try {
+            await fetch('https://chatbot-backend-onan.onrender.com/save_chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ user_id: userId, query, response }),
+            });
+        } catch (error) {
+            console.error('Failed to save chat to history', error);
+        }
+    }
+    
 
     return (
-        <div>
-            <Banner query={query} handleUserChange={handleUserChange}  handleInputChange={handleInputChange}  bloggerQuery={bloggerQuery}/>
-
-            {/* main content */}
-            <div className="bg-[#FAFAFA] md:grid grid-cols-4 gap-8 lg:px-24 px-4 py-12">
-                <div className="bg-white p-4 rounded">
-                    <Sidebar handleChange={handleChange} handleClick={handleClick} />
+        <div className="max-w-screen-2xl md:px-20 fixed h-screen container overflow-hidden">
+            <div className=' p-10 h-full bg-white'>
+                <div className='input-box overflow-y-scroll mt-5'>
+                    {check && <Grittings />}
+                    {queries.map((query, index) => (
+                        <React.Fragment key={index}>
+                            <UserCard query={query} />
+                            {loading && index === queries.length - 1 ? (
+                                <Loader /> // Show loader for the latest query if still loading
+                            ) : (
+                                output[index] && <AssistantCard output={output[index]} />
+                            )}
+                        </React.Fragment>
+                    ))}
                 </div>
-                <div className="col-span-2 bg-white p-4 rounded">
-                    {isLoading ? ( // Loading indicator
-                        <Loading/>
-                    ) : result.length > 0 ? (
-                        <Blogs result={result} />
+                <div className='flex items-center gap-3 md:justify-center'>
+                    <div className="flex md:rounded-s-md rounded border border-primary md:h-10 md:w-1/2 w-full">
+                        <input
+                            type="text"
+                            name="userQuery"
+                            id="userQuery"
+                            value={currentQuery}
+                            onChange={(e) => setCurrentQuery(e.target.value)}
+                            className="block flex-1 border-0 bg-transparent py-1.5 pl-8 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+                            placeholder="Ask me something..."
+                        />
+                        <FiSearch className="absolute mt-2.5 ml-2 mr-2 text-blue" />
+                    </div>
+                    {user ? (
+                        <button type='button' onClick={handleSubmit} className='w-20 h-9 md:h-10 md:w-28 bg-blue rounded text-white'>Submit</button>
                     ) : (
-                        <>
-                            <h3 className="text-lg font-bold mb-2">{result.length} Blogs</h3>
-                            <p>No data found</p>
-                        </>
+                        <Link to='/login'><button type='button' className='w-20 h-9 md:h-10 md:w-28 bg-blue rounded text-white'>Submit</button></Link>
                     )}
                 </div>
-                <div className="bg-white p-4 rounded">
-                    <Newsletter />
-                </div>
+                <p className="text-center text-gray-500 text-xs mt-4">
+                    &copy;2024 Subhadip Hazra. All rights reserved.
+                </p>
             </div>
         </div>
     );

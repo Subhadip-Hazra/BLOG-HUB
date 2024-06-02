@@ -5,13 +5,13 @@ import { initializeApp } from "firebase/app";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-    apiKey: "AIzaSyCQAU3UgdyMiMYfPX1ZIFHZIO02xMDZDAk",
-    authDomain: "blog-hub-f132f.firebaseapp.com",
-    projectId: "blog-hub-f132f",
-    storageBucket: "blog-hub-f132f.appspot.com",
-    messagingSenderId: "787348247287",
-    appId: "1:787348247287:web:e8e64a407d2ffe5510b9f2",
-    measurementId: "G-H8N0GQ8GSZ"
+    apiKey: "AIzaSyBWaF6zvsHolUUCG_P1dFY5XTD-84TODo8",
+    authDomain: "chatbot-58fef.firebaseapp.com",
+    projectId: "chatbot-58fef",
+    storageBucket: "chatbot-58fef.appspot.com",
+    messagingSenderId: "386782281121",
+    appId: "1:386782281121:web:5b96ece6ed09ffec40dfe0",
+    measurementId: "G-WYBS0QFYPQ"
 };
 
 // Initialize Firebase
