@@ -7,15 +7,18 @@ export default {
   theme: {
     extend: {
       colors:{
-        "primary":"#141414",
-        "green":"#05fB4B",
+        "primary":"#06011b",
         "blue":"#1164F4",
-        "cream":"#1164F4"
       },
-      fontFamily:{
-        "fonts":" Cambria, Cochin, Georgia, Times, 'Times New Roman', serif"
-      }
+      boxShadow: {
+        card: '0px 1px 2px 0px rgba(0, 0, 0, 0.05)'
+      },
+      fontFamily: {
+        worksans: ["Work Sans", "sans-serif"],
+        poppins: ['Poppins', "sans-serif"]
+      },
     },
   },
   plugins: [],
 }
+
