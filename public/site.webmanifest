@@ -1,7 +1,7 @@
 {
-    "name": "Blog Hub",
-    "short_name": "Blog Hub",
-    "description": "Your ultimate source for insightful articles.",
+    "name": "Assist Me",
+    "short_name": "AssistMe",
+    "description": "Assist Me is a powerful application designed to address and solve over 60% of user queries efficiently.",
     "start_url": "/",
     "display": "standalone",
     "background_color": "#ffffff",
@@ -22,12 +22,13 @@
     "scope": "/",
     "lang": "en",
     "categories": [
-        "news",
-        "education",
-        "blog",
-        "recipes",
+        "photography",
+        "utilities",
+        "productivity",
+        "ai",
         "tech",
-        "ai"
+        "subhadip hazra",
+        "sanjana das"
     ],
     "screenshots": [
         {
@@ -36,12 +37,12 @@
             "sizes": "720x1280"
         },
         {
-            "src": "/screenshot2.png",
+            "src": "/Screenshot2.png",
             "type": "image/png",
             "sizes": "1280x720"
         },
         {
-            "src": "/screenshot3.png",
+            "src": "/Screenshot3.png",
             "type": "image/png",
             "sizes": "1280x720"
         }
@@ -49,8 +50,8 @@
     "related_applications": [
         {
             "platform": "web",
-            "url": "https://blog-hub-69.netlify.app/",
-            "id": "bloghub"
+            "url": "https://assist-me.netlify.app/",
+            "id": "motion"
         }
     ]
 }
